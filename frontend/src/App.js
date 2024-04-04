@@ -1,23 +1,16 @@
-import {React , useEffect , useState} from 'react'
+import React from 'react'
+import Navbar from './Components/Navbar/Navbar';
+import { BrowserRouter as Router } from 'react-router-dom'
+import Home from './Components/Home/HomeM';
 
 function App() {
-  const[backendData, setbackendData] = useState([{}]);
-
-  useEffect(()=>{
-    fetch("/api",).then((response)=> response.json()).then
-    ((data) => {setbackendData(data)});
-  },[])
   return (
-    <div>
-      {(typeof backendData ==="undefined")?(
-        <p>loading</p>
-      ):(
-        backendData.user.map((user,i)=>(
-          
-          <p key={i}>{user}</p>
-        ))
-      )}
-    </div>
+    <>
+    <Router>
+      <Navbar/>
+      <Home/>
+      </Router>
+    </>
   )
 }
 
