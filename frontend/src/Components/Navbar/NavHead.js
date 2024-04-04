@@ -1,7 +1,30 @@
-import React from 'react'
+import React , { useEffect } from 'react';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 function NavH() {
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollPosition = window.scrollY;
+            const screenWidth = window.innerWidth;
+            const navLinks = document.getElementById('navHead');
+
+            // Apply scroll effect only on mobile devices (screen width less than or equal to 768 pixels)
+            if (screenWidth <= 768) {
+                if (scrollPosition > 90) {
+                    navLinks.classList.add('fixed', 'top-0', 'w-full', 'bg-white', 'z-50', 'shadow-md');
+                } else {
+                    navLinks.classList.remove('fixed', 'top-0', 'w-full', 'bg-white', 'z-50', 'shadow-md');
+                }
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
     return (
         <>
             <div className="bg-black flex justify-center">
@@ -15,7 +38,7 @@ function NavH() {
                     <span className="currency text-sm">INR</span>
                 </div>
             </div>
-            <div className="flex text-center p-2">
+            <div className="flex text-center p-2 overflow-x-auto max-w-full md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl" id='navHead'>
                 <h1 className="text-2xl font-bold">Koza Leathers</h1>
                 <div className="search-favorite-cart max-md:hidden ml-auto flex items-center">
                     <input type="text" placeholder="Search" className="border border-gray-400 px-2 py-1 rounded-md mr-2" />
@@ -25,7 +48,7 @@ function NavH() {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
-export default NavH
+export default NavH;
