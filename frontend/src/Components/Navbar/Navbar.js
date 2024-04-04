@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from "react-router-dom";
 import { Menu, X } from 'lucide-react';
 import NavH from './NavHead';
@@ -31,7 +31,6 @@ const Navlinks = () => {
     );
 };
 
-
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -39,11 +38,29 @@ function Navbar() {
         setIsOpen(!isOpen);
     }
 
+    useEffect(() => {
+        const handleScroll = () => {
+            const scrollPosition = window.scrollY;
+            const navLinks = document.getElementById('navLinks');
+
+            if (scrollPosition > 90) {
+                navLinks.classList.add('fixed', 'top-0', 'w-full', 'bg-white', 'z-50', 'shadow-md');
+            } else {
+                navLinks.classList.remove('fixed', 'top-0', 'w-full', 'bg-white', 'z-50', 'shadow-md');
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
     return (
         <>
             <NavH />
-            <nav className='flex justify-around items-center bg-norm text-lg px-4 py-2'>
+            <nav className='flex justify-around items-center bg-norm text-lg px-4 py-2' id="navLinks">
                 <div className="hidden md:flex">
                     <Navlinks />
                 </div>
@@ -62,5 +79,4 @@ function Navbar() {
     )
 }
 
-
-export default Navbar
+export default Navbar;
