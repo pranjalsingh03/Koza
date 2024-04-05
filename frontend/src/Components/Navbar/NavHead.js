@@ -1,5 +1,6 @@
 import React , { useEffect } from 'react';
 import '@fortawesome/fontawesome-free/css/all.css';
+import { Link } from 'react-router-dom';
 
 function NavH() {
     useEffect(() => {
@@ -33,9 +34,8 @@ function NavH() {
             <div className="mx-auto flex justify-around">
                 <p className="text-sm">Customer Service: +91-9369XXXXXX</p>
                 <div className="user-actions flex items-center">
-                    <a href="http" className="text-sm mr-2">Register</a>
-                    <a href="http" className="text-sm mr-2">Sign In</a>
-                    <span className="currency text-sm">INR</span>
+                <Link to="/signup" className="text-sm mr-2">Sign In</Link>
+                <Link to="/login" className="text-sm mr-2">Log In</Link>
                 </div>
             </div>
             <div className="flex text-center p-2 overflow-x-auto max-w-full md:max-w-screen-md lg:max-w-screen-lg xl:max-w-screen-xl" id='navHead'>
