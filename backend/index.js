@@ -1,73 +1,95 @@
 const express = require('express');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const Product = require('./models/productModel');
+const Blog = require('./models/blogModel');
+const User = require('./models/userModel');
+
 const app = express();
 const PORT = 3001;
 
-const products = [
-    {
-        "id": 1,
-        "name": "brandMe Men's Leather Blazer Genuine Soft Lambskin Coat Jacket BB25",
-        "image": "https://www.62icon.com/client/assets/img/like-icon.svg",
-        "price": 11585.84,
-        "discount": 12
-    },
-    {
-        id: 2,
-        name: "KL Koza Leathers Men’s Genuine Lambskin Leather Jacket KP005",
-        image: "https://www.62icon.com/client/assets/img/like-icon.svg",
-        price: 11252.44,
-        discount: 15
-    },
-    {
-        id: 3,
-        name: "KL Koza Leathers Men’s Genuine Lambskin Leather Jacket KP005",
-        image: "https://www.62icon.com/client/assets/img/like-icon.svg",
-        price: 11252.44,
-        discount: 15
-    },
-    {
-        id: 4,
-        name: "KL Koza Leathers Men’s Genuine Lambskin Leather Jacket KP005",
-        image: "https://www.62icon.com/client/assets/img/like-icon.svg",
-        price: 11252.44,
-        discount: 15
-    },
-    {
-        id: 5,
-        name: "KL Koza Leathers Men’s Genuine Lambskin Leather Jacket KP005",
-        image: "https://www.62icon.com/client/assets/img/like-icon.svg",
-        price: 11252.44,
-        discount: 15
-    },
-    {
-        id: 6,
-        name: "KL Koza Leathers Men’s Genuine Lambskin Leather Jacket KP005",
-        image: "https://www.62icon.com/client/assets/img/like-icon.svg",
-        price: 11252.44,
-        discount: 15
-    },
-    {
-        id: 7,
-        name: "KL Koza Leathers Men’s Genuine Lambskin Leather Jacket KP005",
-        image: "https://www.62icon.com/client/assets/img/like-icon.svg",
-        price: 11252.44,
-        discount: 15
-    },
-    {
-        id: 8,
-        name: "KL Koza Leathers Men’s Genuine Lambskin Leather Jacket KP005",
-        image: "https://www.62icon.com/client/assets/img/like-icon.svg",
-        price: 11252.44,
-        discount: 15
-    },
-];
+// MongoDB connection URI
+const MONGODB_URI = 'mongodb://0.0.0.0:27017/koza'; 
+
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+        console.log('Connected to MongoDB');
+        app.listen(PORT, () => {
+            console.log(`Server is running on port ${PORT}`);
+        });
+    })
+    .catch((error) => {
+        console.error('Error connecting to MongoDB:', error);
+    });
 
 app.use(cors());
 
-app.get('/api/products', (req, res) => {
-    res.json(products);
+app.get('/products', async (req, res) => {
+    try {
+        const products = await Product.find();
+        res.json(products);
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+app.get('/blogs', async (req, res) => {
+    try {
+        const blogs = await Blog.find();
+        res.json(blogs);
+    } catch (error) {
+        console.error('Error fetching blogs:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 });
+
+app.use(express.json());
+
+
+app.post("/login",async(req,res)=>{
+    const{email,password}=req.body
+
+    try{
+        const check=await User.findOne({email:email})
+
+        if(check){
+            res.json("exist")
+        }
+        else{
+            res.json("notexist")
+        }
+
+    }
+    catch(e){
+        res.json("fail")
+    }
+
+})
+
+
+app.post("/signup",async(req,res)=>{
+    const{email,password}=req.body
+
+    const data={
+        email:email,
+        password:password
+    }
+
+    try{
+        const check=await User.findOne({email:email})
+
+        if(check){
+            res.json("exist")
+        }
+        else{
+            res.json("notexist")
+            await User.insertMany([data])
+        }
+
+    }
+    catch(e){
+        res.json("fail")
+    }
+
+})
