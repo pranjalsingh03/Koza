@@ -9,13 +9,13 @@ const Navlinks = () => {
             <NavLink to="/" className="text-gray-700 pl-6 hover:text-gray-900">
                 Home
             </NavLink>
-            <NavLink to="/newarivals" className="text-gray-700 pl-6 hover:text-gray-900">
+            <NavLink to="/newarrivals" className="text-gray-700 pl-6 hover:text-gray-900">
                 New Arrivals
             </NavLink>
             <NavLink to="/shop" className="text-gray-700 pl-6 hover:text-gray-900">
                 Shop
             </NavLink>
-            <NavLink to="/blog" className="text-gray-700 pl-6 hover:text-gray-900">
+            <NavLink to="/blogs" className="text-gray-700 pl-6 hover:text-gray-900">
                 Blog
             </NavLink>
             <NavLink to="/aboutus" className="text-gray-700 pl-6 hover:text-gray-900">
@@ -60,11 +60,11 @@ function Navbar() {
     return (
         <>
             <NavH />
-            <nav className='flex justify-around items-center bg-norm text-lg px-4 py-2' id="navLinks">
+            <nav className='flex justify-around items-center bg-norm text-lg px-4 py-2 max-md:py-0' id="navLinks">
                 <div className="hidden md:flex">
                     <Navlinks />
                 </div>
-                <div className="md:hidden toggle-nav flex">
+                <div className="hidden toggle-nav max-md:block">
                     <button onClick={toggleNav}>
                         {isOpen ? <X className="h-6 w-6 text-gray-700 ml-40" /> : <Menu className="h-6 w-6 text-gray-700 ml-40" />}
                     </button>
