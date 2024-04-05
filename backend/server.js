@@ -39,6 +39,27 @@ const products = [
         price: 11252.44,
         discount: 15
     },
+    {
+        id: 6,
+        name: "KL Koza Leathers Men’s Genuine Lambskin Leather Jacket KP005",
+        image: "https://www.62icon.com/client/assets/img/like-icon.svg",
+        price: 11252.44,
+        discount: 15
+    },
+    {
+        id: 7,
+        name: "KL Koza Leathers Men’s Genuine Lambskin Leather Jacket KP005",
+        image: "https://www.62icon.com/client/assets/img/like-icon.svg",
+        price: 11252.44,
+        discount: 15
+    },
+    {
+        id: 8,
+        name: "KL Koza Leathers Men’s Genuine Lambskin Leather Jacket KP005",
+        image: "https://www.62icon.com/client/assets/img/like-icon.svg",
+        price: 11252.44,
+        discount: 15
+    },
 ];
 
 app.use(cors());
