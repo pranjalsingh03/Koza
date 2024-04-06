@@ -23,7 +23,11 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
         console.error('Error connecting to MongoDB:', error);
     });
 
-app.use(cors());
+    app.use(cors({
+        origin: 'https://kozaleather.vercel.app',
+        methods: ['GET', 'POST'],
+        credentials: true
+    }));
 
 app.get('/products', async (req, res) => {
     try {
