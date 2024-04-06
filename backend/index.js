@@ -4,12 +4,13 @@ const mongoose = require('mongoose');
 const Product = require('./models/productModel');
 const Blog = require('./models/blogModel');
 const User = require('./models/userModel');
+require('dotenv').config();
 
 const app = express();
 const PORT = 3001;
 
 // MongoDB connection URI
-const MONGODB_URI = 'mongodb://0.0.0.0:27017/koza'; 
+const MONGODB_URI = process.env.MONGODB_CONNECT_URL; 
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
