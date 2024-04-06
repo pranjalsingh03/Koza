@@ -15,7 +15,7 @@ function Login() {
 
         try{
 
-            await axios.post("http://localhost:3001/login",{
+            await axios.post("https://kozabackend.vercel.app/login",{
                 email,password
             })
             .then(res=>{

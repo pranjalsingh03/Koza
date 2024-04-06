@@ -7,7 +7,7 @@ const ProductCard = ({ product }) => {
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{product.name}</div>
         <p className="text-gray-700 text-base">
-          Price: ₹{product.price.toFixed(2)}
+          Price: ₹{product.price?.toFixed(2)}
         </p>
         <p className="text-gray-700 text-base">
           Discount: -{product.discount}%

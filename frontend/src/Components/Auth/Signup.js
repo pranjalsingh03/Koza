@@ -11,7 +11,7 @@ function Signup() {
         e.preventDefault();
 
         try {
-            await axios.post("http://localhost:3001/signup", {
+            await axios.post("https://kozabackend.vercel.app/signup", {
                 email,
                 password
             }).then(res => {

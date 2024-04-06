@@ -10,7 +10,7 @@ function Male() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/products');
+                const response = await axios.get('https://kozabackend.vercel.app/products');
                 setProducts(response.data);
             } catch (error) {
                 console.error('Error fetching products:', error);
