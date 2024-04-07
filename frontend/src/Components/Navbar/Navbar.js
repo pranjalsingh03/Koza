@@ -1,52 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from "react-router-dom";
-import { Menu, X } from 'lucide-react';
-import NavH from './NavHead';
+import { NavLink } from 'react-router-dom';
+import { Menu, Heart, ShoppingCart, X } from 'lucide-react';
 
-const Navlinks = () => {
-    return (
-        <div className="flex md:flex-row flex-col items-center">
-            <NavLink to="/" className="text-gray-700 pl-6 hover:text-gray-900">
-                Home
-            </NavLink>
-            <NavLink to="/newarrivals" className="text-gray-700 pl-6 hover:text-gray-900">
-                New Arrivals
-            </NavLink>
-            <NavLink to="/shop" className="text-gray-700 pl-6 hover:text-gray-900">
-                Shop
-            </NavLink>
-            <NavLink to="/blogs" className="text-gray-700 pl-6 hover:text-gray-900">
-                Blog
-            </NavLink>
-            <NavLink to="/aboutus" className="text-gray-700 pl-6 hover:text-gray-900">
-                About Us
-            </NavLink>
-            <NavLink to="/FAQ" className="text-gray-700 pl-6 hover:text-gray-900">
-                FAQ
-            </NavLink>
-            <NavLink to="/contact" className="text-gray-700 pl-6 hover:text-gray-900">
-                Contact Us
-            </NavLink>
-        </div>
-    );
-};
-
-function Navbar() {
+const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
-    const toggleNav = () => {
+    const toggleMenu = () => {
         setIsOpen(!isOpen);
-    }
+    };
 
     useEffect(() => {
         const handleScroll = () => {
             const scrollPosition = window.scrollY;
-            const navLinks = document.getElementById('navLinks');
+            const screenWidth = window.innerWidth;
+            const navLinks = document.getElementById('navHead');
 
-            if (scrollPosition > 90) {
-                navLinks.classList.add('fixed', 'top-0', 'w-full', 'bg-white', 'z-50', 'shadow-md');
-            } else {
-                navLinks.classList.remove('fixed', 'top-0', 'w-full', 'bg-white', 'z-50', 'shadow-md');
+            // Apply scroll effect only on mobile devices (screen width less than or equal to 768 pixels)
+            if (screenWidth <= 768) {
+                if (scrollPosition > 90) {
+                    navLinks.classList.add('fixed', 'top-0', 'w-full', 'bg-main', 'z-50', 'shadow-md');
+                } else {
+                    navLinks.classList.remove('fixed', 'top-0', 'w-full', 'bg-main', 'z-50', 'shadow-md');
+                }
             }
         };
 
@@ -58,25 +33,27 @@ function Navbar() {
     }, []);
 
     return (
-        <>
-            <NavH />
-            <nav className='flex justify-around items-center bg-norm text-lg px-4 py-2 max-md:py-0' id="navLinks">
-                <div className="hidden md:flex">
-                    <Navlinks />
-                </div>
-                <div className="hidden toggle-nav max-md:block">
-                    <button onClick={toggleNav}>
-                        {isOpen ? <X className="h-6 w-6 text-gray-700 ml-40" /> : <Menu className="h-6 w-6 text-gray-700 ml-40" />}
-                    </button>
-                </div>
-            </nav>
-            {isOpen &&
-                <div className='bg-gray-100 p-4 flex flex-wrap basis-full justify-center'>
-                    <Navlinks />
-                </div>
-            }
-        </>
-    )
-}
+        <nav className="navbar-main p-4 bg-main flex items-center justify-between fixed top-0 w-full z-50 shadow-md" id="navHead">
+            <div className="flex items-center justify-center md:justify-start">
+                <button className="text-gray-700 mr-4 md:hidden" onClick={toggleMenu}>
+                    {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+                </button>
+                <h1 className="text-gray-700 text-lg font-bold">Logo</h1>
+            </div>
+            <ul className={`md:flex md:space-x-4 ${isOpen ? 'block' : 'hidden'}`}>
+                <li><NavLink to="/" className="text-gray-700" activeClassName="font-bold">Home</NavLink></li>
+                <li><NavLink to="/womens" className="text-gray-700" activeClassName="font-bold">Womens</NavLink></li>
+                <li><NavLink to="/mens" className="text-gray-700" activeClassName="font-bold">Mens</NavLink></li>
+                <li><NavLink to="/newarrivals" className="text-gray-700" activeClassName="font-bold">New Arrivals</NavLink></li>
+                <li><NavLink to="/blogs" className="text-gray-700" activeClassName="font-bold">Blogs</NavLink></li>
+                <li><NavLink to="/FAQ" className="text-gray-700" activeClassName="font-bold">FAQ</NavLink></li>
+            </ul>
+            <div className="flex items-center">
+                <Heart className="h-6 w-6 text-gray-700 mr-4" />
+                <ShoppingCart className="h-6 w-6 text-gray-700" />
+            </div>
+        </nav>
+    );
+};
 
 export default Navbar;
