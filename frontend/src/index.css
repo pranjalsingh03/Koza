@@ -9,15 +9,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #d2b48c;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-.banner{
-  background-image: url(./Images/hero_img.jpg);
 }
 
 @media not all and (min-width: 768px) {
