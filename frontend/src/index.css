@@ -9,7 +9,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #d2b48c;
+  background-color: white;
 }
 
 code {
@@ -21,6 +21,9 @@ code {
   background-size: cover;
   background-position: center;
   height: 75vh;
+}
+.navbar-main{
+  background-color: #e9e9c8;
 }
 
 @media not all and (min-width: 768px) {
