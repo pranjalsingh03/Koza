@@ -38,7 +38,7 @@ const Navbar = () => {
                 <button className="text-gray-700 mr-4 md:hidden" onClick={toggleMenu}>
                     {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                 </button>
-                <h1 className="text-gray-700 text-lg font-bold">Logo</h1>
+                <h1 className="text-gray-700 text-3xl font-bold">kůže</h1>
             </div>
             <ul className={`md:flex md:space-x-4 ${isOpen ? 'block' : 'hidden'}`}>
                 <li><NavLink to="/" className="text-gray-700" activeClassName="font-bold">Home</NavLink></li>

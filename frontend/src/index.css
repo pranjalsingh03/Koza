@@ -16,10 +16,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.banner{
+  background-image: url(./Images/landingimg.png);
+  background-size: cover;
+  background-position: center;
+  height: 75vh;
+}
 
 @media not all and (min-width: 768px) {
   .toggle-nav{
     margin-top: -3.5rem;
     margin-left: auto;
+  }
+  .banner{
+    background-image: url(./Images/landingimg1.jpg);
+    height: 58vh;
   }
 }

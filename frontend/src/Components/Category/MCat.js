@@ -22,8 +22,8 @@ const ProductCard = ({ imageSrc, text, route }) => {
 const MCat = () => {
     return (
         <div className="container mx-auto py-8 text-center">
-            <h1 className="text-3xl font-bold mb-4">Welcome to Koza Leathers - The Best Online Leather Jacket Store</h1>
-            <p className="text-black font-bold">KOZA BOUTIQUE.</p>
+            <h1 className="text-3xl font-bold mb-4">Welcome to kůže Leathers - The Best Online Leather Jacket Store</h1>
+            <p className="text-black font-bold">kůže BOUTIQUE.</p>
             <p className='p-8 mx-16'> Shop widest range of all type of leather products. Every item is handmade by our experts and checked before shipping. We use 100% Genuine Lambskin Leather in our products.</p>
             <div className="flex flex-wrap justify-center">
                 <ProductCard imageSrc={Male} text="MEN" route="/category/male" />
