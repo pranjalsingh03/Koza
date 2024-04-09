@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink ,Link } from 'react-router-dom';
 import { Menu, Heart, ShoppingCart, X } from 'lucide-react';
 
 const Navbar = () => {
@@ -57,7 +57,9 @@ const Navbar = () => {
             </ul>
             <div className="flex items-center">
                 <Heart className="h-6 w-6 text-gray-700 mr-4" />
+                <Link to="/cart">
                 <ShoppingCart className="h-6 w-6 text-gray-700" />
+                </Link>
             </div>
         </nav>
     );
