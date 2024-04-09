@@ -51,77 +51,66 @@ app.get('/blogs', async (req, res) => {
 
 app.use(express.json());
 
+app.post("/login", async (req, res) => {
+    const { email, password } = req.body;
 
-app.post("/login",async(req,res)=>{
-    const{email,password}=req.body
+    try {
+        const user = await User.findOne({ email, password });
 
-    try{
-        const check=await User.findOne({email:email})
-
-        if(check){
-            res.json("exist")
+        if (user) {
+            // Return user ID if login successful
+            res.json({ userId: user._id });
+        } else {
+            res.status(401).json({ error: 'Invalid credentials' });
         }
-        else{
-            res.json("notexist")
-        }
-
+    } catch (error) {
+        console.error('Error logging in:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
-    catch(e){
-        res.json("fail")
-    }
-
-})
-
-
-app.post("/signup",async(req,res)=>{
-    const{email,password}=req.body
-
-    const data={
-        email:email,
-        password:password
-    }
-
-    try{
-        const check=await User.findOne({email:email})
-
-        if(check){
-            res.json("exist")
-        }
-        else{
-            res.json("notexist")
-            await User.insertMany([data])
-        }
-
-    }
-    catch(e){
-        res.json("fail")
-    }
-
 });
 
+// Signup endpoint
+app.post("/signup", async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        const existingUser = await User.findOne({ email });
+
+        if (existingUser) {
+            return res.status(400).json({ error: 'User already exists' });
+        }
+
+        const newUser = new User({ email, password });
+        await newUser.save();
+
+        res.status(201).json({ message: 'User created successfully' });
+    } catch (error) {
+        console.error('Error signing up:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// Add item to cart
 app.post('/cart/add', async (req, res) => {
     const { productId, userId } = req.body;
 
     try {
-        // Find user by userId
         const user = await User.findById(userId);
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Find product by productId
         const product = await Product.findById(productId);
 
         if (!product) {
             return res.status(404).json({ error: 'Product not found' });
         }
 
-        // Add product to user's cart
-        user.cart.push(product);
+        user.cart.push(productId);
         await user.save();
 
-        res.json(user.cart); // Return updated cart
+        res.json({ message: 'Product added to cart successfully' });
     } catch (error) {
         console.error('Error adding item to cart:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -133,36 +122,33 @@ app.delete('/cart/remove/:productId/:userId', async (req, res) => {
     const { productId, userId } = req.params;
 
     try {
-        // Find user by userId
         const user = await User.findById(userId);
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Remove product from user's cart
-        user.cart = user.cart.filter(item => item.toString() !== productId);
+        user.cart = user.cart.filter(itemId => itemId.toString() !== productId);
         await user.save();
 
-        res.json(user.cart); // Return updated cart
+        res.json({ message: 'Product removed from cart successfully' });
     } catch (error) {
         console.error('Error removing item from cart:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
 
+// Get total price of items in cart
 app.get('/cart/total/:userId', async (req, res) => {
     const { userId } = req.params;
 
     try {
-        // Find user by userId
         const user = await User.findById(userId).populate('cart');
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        // Calculate total price
         let totalPrice = 0;
         for (const item of user.cart) {
             totalPrice += item.price;
