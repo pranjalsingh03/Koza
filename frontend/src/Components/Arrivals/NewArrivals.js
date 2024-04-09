@@ -11,8 +11,9 @@ const NewArrivals = () => {
     const addToCart = (product) => {
         setCartItems([...cartItems, product]);
     };
-    const likeProduct = (product) => {
-        // Handle like functionality here
+
+    const likeProduct = (productId) => {
+        console.log(`Liked product with ID: ${productId}`);
     };
 
     useEffect(() => {
@@ -49,8 +50,8 @@ const NewArrivals = () => {
             <div className="grid grid-cols-2 max-md:grid-cols-1 lg:grid-cols-4 gap-8">
                 {products.map((product) => (
                     <ProductCard key={product._id} product={product}
-                    onAddToCart={addToCart} // Pass addToCart function
-                        onLike={likeProduct} />
+                        onAddToCart={() => addToCart(product)}
+                        onLike={() => likeProduct(product._id)} />
                 ))}
             </div>
         </div>
