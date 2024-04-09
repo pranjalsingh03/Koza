@@ -8,6 +8,7 @@ import Blog from './Components/Blog/Blog';
 import NewArrivals from './Components/Arrivals/NewArrivals';
 import Login from './Components/Auth/Login';
 import Signup from './Components/Auth/Signup';
+import Cart from './Components/AddtoCart/Cart';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
+          <Route path="/cart" element={<Cart />} />
           <Route path="/login" element={<Login />} exact />
           <Route path="/signup" element={<Signup />} exact />
           <Route path="/" element={<Home />} exact />
