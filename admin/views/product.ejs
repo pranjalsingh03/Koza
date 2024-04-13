@@ -1,0 +1,45 @@
+<%- include('layout/header') %>
+
+    <div class="container">
+        <div class="row my-4">
+            <div class="col-lg-12">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Description</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% products.forEach((row,index)=>{%>
+                            <tr>
+                                <td>
+                                    <%= index + 1 %>
+                                </td>
+                                <td><img src="<%= row.image %>" alt="" style="width: 100px; height: 100px;"
+                                        class="img-thumbnail"></td>
+                                <td>
+                                    <%= row.name %>
+                                </td>
+                                <td>$<%= row.price %>
+                                </td>
+                                <td>
+                                    <%= row.discount %>
+                                </td>
+                                <td>
+                                    <a href="/edit/<%row._id%>" class="text-success"><i class="fas fa-edit fa-lg mx-l"></ i></a>
+                                    <a href="/delete/<%row._id%>" class="text-danger"><i class="fas fa-trash fa-lg mx-l"></ i></a>
+                                </td>
+                            </tr>
+                            <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <%- include('layout/footer') %>
