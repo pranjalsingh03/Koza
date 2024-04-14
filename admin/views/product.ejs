@@ -1,8 +1,18 @@
 <%- include('layout/header') %>
 
-    <div class="container">
-        <div class="row my-4">
-            <div class="col-lg-12">
+<div class="container">
+    <div class="row my-4">
+        <div class="col-lg-12">
+            <% if (message) { %>
+            <div class="alert alert-dismissible fade show alert-<%= message.type%>" role="alert">
+                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="close"></button>
+                <strong>
+                    <%= message.message %>
+                </strong>
+            </div>
+            <% } %>
+            <div class="table-responsive">
+                <% if (products.length > 0) { %>
                 <table class="table table-striped table-bordered">
                     <thead class="thead-dark">
                         <tr>
@@ -11,35 +21,45 @@
                             <th>Product Name</th>
                             <th>Price</th>
                             <th>Description</th>
+                            <th>Category</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% products.forEach((row,index)=>{%>
-                            <tr>
-                                <td>
-                                    <%= index + 1 %>
-                                </td>
-                                <td><img src="<%= row.image %>" alt="" style="width: 100px; height: 100px;"
-                                        class="img-thumbnail"></td>
-                                <td>
-                                    <%= row.name %>
-                                </td>
-                                <td>$<%= row.price %>
-                                </td>
-                                <td>
-                                    <%= row.discount %>
-                                </td>
-                                <td>
-                                    <a href="/edit/<%= row._id %>" class="text-success"><i class="fas fa-edit fa-lg mx-l"></i></a>
-                                    <a href="/delete/<%= row._id %>" class="text-danger"><i class="fas fa-trash fa-lg mx-l"></i></a>
-                                </td>                                
-                            </tr>
-                            <% }) %>
+                        <% products.forEach((row, index) => { %>
+                        <tr>
+                            <td>
+                                <%= index + 1 %>
+                            </td>
+                            <td><img src="<%= row.image %>" alt="" style="width: 100px; height: 100px;"
+                                    class="img-thumbnail"></td>
+                            <td>
+                                <%= row.name %>
+                            </td>
+                            <td>$<%= row.price %>
+                            </td>
+                            <td>
+                                <%= row.discount %>
+                            </td>
+                            <td>
+                                <%= row.category %> 
+                            </td>
+                            <td>
+                                <a href="/edit/<%= row._id %>" class="text-success"><i
+                                        class="fas fa-edit fa-lg mx-l"></i></a>
+                                <a href="/delete/<%= row._id %>" class="text-danger"><i
+                                        class="fas fa-trash fa-lg mx-l"></i></a>
+                            </td>
+                        </tr>
+                        <% }) %>
                     </tbody>
                 </table>
+                <% } else { %>
+                <h3 class="display-4 text-center">No Product Found</h3>
+                <% } %>
             </div>
         </div>
     </div>
+</div>
 
-    <%- include('layout/footer') %>
+<%- include('layout/footer') %>

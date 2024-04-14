@@ -1,10 +1,11 @@
 <%- include('layout/header') %>
 
 <div class="container">
-    <form action="/addproduct" method="post" enctype="multipart/form-data">
+    <h1>Edit Product</h1>
+    <form action="/update/<%= product._id %>" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="name" class="form-label">Product Name</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+            <input type="text" class="form-control" id="name" name="name" value="<%= product.name %>" required>
         </div>
         <div class="mb-3">
             <label for="category" class="form-label">Category</label>
@@ -19,17 +20,19 @@
         
         <div class="mb-3">
             <label for="productImage" class="form-label">Image</label>
-            <input class="form-control" id="productImage" type="file" name="image" required>
+            <input class="form-control" id="productImage" type="file" name="image">
+            <img src="/<%= product.image %>" width="100%" class="img-thumbnail mt-1">
+            <input type="hidden" name="old_image" value="<%= product.image %>" id="">
         </div>
         <div class="mb-3">
             <label for="productPrice" class="form-label">Price</label>
-            <input type="text" class="form-control" id="productPrice" name="price" required>
+            <input type="text" class="form-control" id="productPrice" name="price" value="<%= product.price %>" required>
         </div>
         <div class="mb-3">
             <label for="productDiscount" class="form-label">Discount</label>
-            <input type="text" class="form-control" id="productDiscount" name="discount" required>
+            <input type="text" class="form-control" id="productDiscount" name="discount" value="<%= product.discount %>" required>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="submit" class="btn btn-success" value="Update Product">Update Product</button>
     </form>
 </div>
 
