@@ -1,0 +1,26 @@
+<%- include('layout/header') %>
+
+<div class="container">
+    <form action="/addproduct" method="post">
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label
+            ">Product Name</label>
+            <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="productname">
+        </div>
+        <div class="mb-3">
+            <label for="formFileSm" class="form-label">Image</label>
+            <input class="form-control form-control-sm" id="formFileSm" type="file">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Price</label>
+            <input type="text" class="form-control" id="exampleInputPassword1" name="price">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Description</label>
+            <input type="text" class="form-control" id="exampleInputPassword1" name="description">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<%- include('layout/footer') %>
