@@ -1,42 +1,50 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const Product = require('../models/productModel');
-const multer = require('multer');
+const Product = require("../models/productModel");
+const multer = require("multer");
 
 var storage = multer.diskStorage({
-  destination : function(req, file, cb) { cb(null, './images') },
-  filename : function(req, file, cb) { cb(null, file.originalname) }
+  destination: function (req, file, cb) {
+    cb(null, "./images");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
 });
 
-var upload = multer({storage : storage}).single('image');
+var upload = multer({ storage: storage }).single("image");
 
-router.get("/", (req, res) => {res.render('index', {title : 'Home Page'})});
+router.get("/", (req, res) => {
+  res.render("index", { title: "Home Page" });
+});
 
-router.get('/product', async (req, res) => {
+router.get("/product", async (req, res) => {
   const products = await Product.find();
-  res.render('product', {title : 'Products', products : products})
+  res.render("product", { title: "Products", products: products });
 });
 
-router.get('/addproduct',
-           (req, res) => {res.render('addproduct', {title : "Add Products"})})
+router.get("/addproduct", (req, res) => {
+  res.render("addproduct", { title: "Add Products" });
+});
 
-router.get('/addblog',
-           (req, res) => {res.render('addblog', {title : 'Add Blogs'})})
+router.get("/addblog", (req, res) => {
+  res.render("addblog", { title: "Add Blogs" });
+});
 
-router.post('/addproduct', upload, async (req, res) => {
+router.post("/addproduct", upload, async (req, res) => {
   const product = new Product({
-    name : req.body.name,
-    image : req.file.originalname,
-    price : req.body.price,
-    discount : req.body.discount
-  })
+    name: req.body.name,
+    image: req.file.originalname,
+    price: req.body.price,
+    discount: req.body.discount,
+  });
   try {
     await product.save();
-    res.redirect('/product');
+    res.redirect("/product");
   } catch (err) {
     console.log(err);
   }
-})
+});
 
 // update the data in database using put method
 router.put("/edit/:id", upload, async (req, res) => {
@@ -56,7 +64,7 @@ router.put("/edit/:id", upload, async (req, res) => {
       Object.assign(product, req.body);
       await product.save();
     }
-    res.redirect('/product');
+    res.redirect("/product");
   } catch (error) {
     console.log(error);
     res.status(500).send("Internal Server Error");
@@ -73,10 +81,10 @@ router.get("/delete/:id", async (req, res) => {
       }
     });
 
-    res.redirect('/product');
+    res.redirect("/product");
   } catch (e) {
     console.log(e);
   }
-})
+});
 
 module.exports = router;
