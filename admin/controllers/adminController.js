@@ -5,20 +5,20 @@ const User = require("../models/userModel");
 const adminController = {
   async login(req, res) {
     try {
-      const {username, password} = req.body;
-      const user = await User.findOne({username});
+      const { username, password } = req.body;
+      const user = await User.findOne({ username });
       if (!user) {
         req.session.message = {
-          type : "error",
-          message : "Invalid username or password",
+          type: "error",
+          message: "Invalid username or password",
         };
         return res.redirect("/admin/login");
       }
       const validPassword = await bcrypt.compare(password, user.password);
       if (!validPassword) {
         req.session.message = {
-          type : "error",
-          message : "Invalid username or password",
+          type: "error",
+          message: "Invalid username or password",
         };
         return res.redirect("/admin/login");
       }
@@ -40,34 +40,37 @@ const adminController = {
     }
   },
 
-  dashboard(req, res) { res.render("index", {title : "Dashboard"}); },
+  dashboard(req, res) {
+    res.render("index", { title: "Dashboard" });
+  },
 
   async loadProducts(req, res) {
     try {
       const products = await Product.find();
-      res.render("product", {title : "Products", products : products});
+      res.render("product", { title: "Products", products: products });
     } catch (error) {
       console.error(error);
       res.status(500).send("Internal Server Error");
     }
   },
 
-  loadAddProduct(req,
-                 res) { res.render("addProduct", {title : "Add Product"}); },
+  loadAddProduct(req, res) {
+    res.render("addProduct", { title: "Add Product" });
+  },
 
   async addProduct(req, res) {
     try {
       const product = new Product({
-        name : req.body.name,
-        image : req.file.filename,
-        price : req.body.price,
-        discount : req.body.discount,
-        category : req.body.category,
+        name: req.body.name,
+        image: req.file.filename,
+        price: req.body.price,
+        discount: req.body.discount,
+        category: req.body.category,
       });
       await product.save();
       req.session.message = {
-        type : "success",
-        message : "Product Added Successfully",
+        type: "success",
+        message: "Product Added Successfully",
       };
       res.redirect("/admin/products");
     } catch (error) {
@@ -83,7 +86,7 @@ const adminController = {
       if (!product) {
         return res.redirect("/admin/products");
       }
-      res.render("editProduct", {title : "Edit Product", product : product});
+      res.render("editProduct", { title: "Edit Product", product: product });
     } catch (error) {
       console.error(error);
       res.status(500).send("Internal Server Error");
@@ -110,8 +113,8 @@ const adminController = {
       await product.save();
 
       req.session.message = {
-        type : "success",
-        message : "Product Updated Successfully",
+        type: "success",
+        message: "Product Updated Successfully",
       };
       res.redirect("/admin/products");
     } catch (error) {
@@ -128,8 +131,8 @@ const adminController = {
         return res.status(404).send("Product not found");
       }
       req.session.message = {
-        type : "success",
-        message : "Product Deleted Successfully",
+        type: "success",
+        message: "Product Deleted Successfully",
       };
       res.redirect("/admin/products");
     } catch (error) {
