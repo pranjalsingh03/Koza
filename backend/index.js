@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const Product = require('./models/productModel');
 const Blog = require('./models/blogModel');
+const Cart = require('./models/cartModel')
 const User = require('./models/userModel');
 require('dotenv').config();
 
@@ -24,7 +25,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
     });
 
     app.use(cors({
-        origin: 'https://kozaleather.vercel.app',
+        origin: 'http://localhost:3000',
         methods: ['GET', 'POST'],
         credentials: true
     }));
@@ -69,6 +70,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
+
 // Signup endpoint
 app.post("/signup", async (req, res) => {
     const { email, password } = req.body;
@@ -92,30 +94,32 @@ app.post("/signup", async (req, res) => {
 
 // Add item to cart
 app.post('/cart/add', async (req, res) => {
-    const { productId, userId } = req.body;
-
+    const { product, quantity } = req.body;
     try {
-        const user = await User.findById(userId);
-
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        const product = await Product.findById(productId);
-
-        if (!product) {
-            return res.status(404).json({ error: 'Product not found' });
-        }
-
-        user.cart.push(productId);
-        await user.save();
-
-        res.json({ message: 'Product added to cart successfully' });
+        const cartItem = new Cart({ product, quantity });
+        await cartItem.save();
+        res.status(201).json(cartItem);
+        console.log("Cart item added successfully", cartItem);
     } catch (error) {
         console.error('Error adding item to cart:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
+
+
+
+
+// Get items in cart
+app.get('/cart', async (req, res) => {
+    try {
+        const cartItems = await Cart.find(); 
+        res.json(cartItems);
+    } catch (error) {
+        console.error('Error fetching cart items:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
 
 // Remove item from cart
 app.delete('/cart/remove/:productId/:userId', async (req, res) => {
