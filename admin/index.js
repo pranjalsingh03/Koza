@@ -1,36 +1,41 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
-const app = express();
-const PORT = 4000;
 
+const app = express();
+const PORT = process.env.PORT || 4000;
 const MONGODB_ADMIN = process.env.MONGODB_CONNECT_URL;
 
-// Middlewares
+// Middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(
-    session({
-        secret: "my secret",
-        saveUninitialized: false,
-        resave: false
-    })
-);
+app.use(cookieParser());
+app.use(session({
+    secret: 'mysecret',
+    saveUninitialized: false,
+    resave: false
+}));
+app.use(express.static('uploads'));
+app.set('view engine', 'ejs');
+app.set("layouts", "./layouts/main");
+
+
 app.use((req, res, next) => {
-    res.locals.message = req.session.message;
-    delete req.session.message;
-    next();
-});
+        res.locals.message = req.session.message;
+        delete req.session.message;
+        next();
+    });
 
-app.set("view engine", "ejs");
+// Database connection
+mongoose.connect(MONGODB_ADMIN, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Connected to Database'))
+    .catch(err => console.error('Database connection error:', err));
 
-mongoose.connect(MONGODB_ADMIN, { useNewUrlParser: true, useUnifiedTopology: true });
-const db = mongoose.connection;
-db.on('error', (error) => console.error(error));
-db.once('open', () => console.log("Connected to Database"));
+// Routes
+app.use("/", require("./routes/admin"));
 
-app.use("", require('./routes/routes'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
