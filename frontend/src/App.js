@@ -6,9 +6,10 @@ import CategoryPage from './Components/Category/CategoryPage';
 import Footer from './Components/Footer/Footer';
 import Blog from './Components/Blog/Blog';
 import NewArrivals from './Components/Arrivals/NewArrivals';
-import Login from './Components/Auth/Login';
-import Signup from './Components/Auth/Signup';
 import Cart from './Components/AddtoCart/Cart';
+import HomeProduct from './Components/HomeProduct/HomeProduct';
+import Auth from './Components/Auth/Auth';
+import "./App.css";
 
 function App() {
   return (
@@ -16,10 +17,11 @@ function App() {
       <Router>
         <Navbar />
         <Routes>
+        <Route path='/' element={<Auth />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/login" element={<Login />} exact />
-          <Route path="/signup" element={<Signup />} exact />
-          <Route path="/" element={<Home />} exact />
+          <Route path="/login" element={<Auth />} exact />
+          <Route path="/signup" element={<Auth />} exact />
+          <Route path="/home" element={<Home />} exact />
           <Route path="/blogs" element={<Blog />} exact />
           {/* <Route path="/contactus" element={<Home />} exact /> */}
           <Route path="/FAQ" element={<Home />} exact />
@@ -28,6 +30,7 @@ function App() {
           <Route path="/aboutus" element={<Home />} exact />
           <Route path="/category" element={<CategoryPage />} />
           <Route path="/category/:type" element={<CategoryPage />} />
+          <Route path="/product/:productId" element={<HomeProduct />} />
         </Routes>
         <Footer email="kozaleather@help.com"/>
       </Router>
