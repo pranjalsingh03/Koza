@@ -1,44 +1,50 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, {useState} from 'react';
 
-function Login({ setUserId }) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+function Login({setUserId}) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    const handleLogin = async () => {
-        try {
-            const response = await axios.post('http://localhost:3001/login', { email, password });
-            setUserId(response.data.userId);
-        } catch (error) {
-            console.error('Error logging in:', error);
-        }
-    };
+  const handleLogin = async () => {
+    try {
+      const response =
+          await axios.post('http://localhost:3001/login', {email, password});
+      setUserId(response.data.userId);
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
+  };
 
-    return (
-        <div className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <h2 className="text-xl mb-4 font-bold">Login</h2>
+  return (
+      <div className =
+           "max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <h2 className = "text-xl mb-4 font-bold">Login<
+          /h2>
             <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} className="mb-4 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-            <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="mb-6 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
-            <button onClick={handleLogin} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Login
-            </button>
-        </div>
-    );
+      <input type = "password" placeholder = "Password" value =
+           {password} onChange = {(e) =>
+                                      setPassword(e.target.value)} className =
+               "mb-6 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+      <button onClick = {handleLogin} className =
+           "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          Login</button>
+        </div>);
 }
 
-function Signup({ setUserId }) {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+function Signup({setUserId}) {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-    const handleSignup = async () => {
-        try {
-            const response = await axios.post('http://localhost:3001/signup', { name, email, password });
-            setUserId(response.data.userId);
-        } catch (error) {
-            console.error('Error signing up:', error);
-        }
-    };
+  const handleSignup = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/signup',
+                                        {name, email, password});
+      setUserId(response.data.userId);
+    } catch (error) {
+      console.error('Error signing up:', error);
+    }
+  };
 
     return (
         <div className="max-w-md mx-auto">
@@ -67,7 +73,8 @@ function Auth() {
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <Login setUserId={setUserId} />
+                        <Login setUserId={
+      setUserId} />
                         <Signup setUserId={setUserId} />
                     </div>
                 )}
