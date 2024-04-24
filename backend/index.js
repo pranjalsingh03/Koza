@@ -41,7 +41,7 @@ const authenticateToken = (req, res, next) => {
     const token = authHeader && authHeader.split(' ')[1];
     if (token == null) return res.sendStatus(401);
 
-    jwt.verify(token, JWT_SKEY, (err, user) => {
+    jwt.verify(token, JWT_key, (err, user) => {
         if (err) return res.sendStatus(403);
         req.user = { userId: user.userId };
         next();
@@ -60,7 +60,7 @@ app.post('/cart/add', async (req, res) => {
         const token = authHeader.split(' ')[1];
         console.log(token);
         // Verify and decode the token
-        const decodedToken = jwt.verify(token, JWT_SKEY);
+        const decodedToken = jwt.verify(token, JWT_key);
         const userId = decodedToken.userId;
 
         const user = await User.findById(userId);
@@ -177,7 +177,7 @@ app.post('/login', async (req, res) =>
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ userId: user._id }, JWT_SKEY, { expiresIn: '7d' });
+        const token = jwt.sign({ userId: user._id }, JWT_key, { expiresIn: '7d' });
 
         res.json({ token, userId: user._id });
     } catch (error) {
