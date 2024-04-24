@@ -18,7 +18,7 @@ export default function HomeProduct() {
     useEffect(() => {
         async function fetchProduct() {
             try {
-                const response = await axios.get(`http://localhost:3001/product/${productId}`);
+                const response = await axios.get(`https://kuzebackend.vercel.app/product/${productId}`);
                 setProduct(response.data);
                 setLoading(false);
             } catch (error) {
