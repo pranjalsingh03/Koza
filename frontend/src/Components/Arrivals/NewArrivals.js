@@ -9,9 +9,16 @@ const NewArrivals = () => {
     const [cartItems, setCartItems] = useState([]);
 
     const addToCart = (product) => {
-        setCartItems([...cartItems, product]);
+        console.log("Adding to cart:", product._id);
+        axios.post('http://localhost:3001/cart/add', { productId: product._id })
+            .then(response => {
+                console.log("Add to cart response:", response.data);
+                setCartItems([...cartItems, response.data]);
+            })
+            .catch(error => {
+                console.error('Error adding to cart:', error);
+            });
     };
-
     const likeProduct = (productId) => {
         console.log(`Liked product with ID: ${productId}`);
     };
@@ -19,7 +26,7 @@ const NewArrivals = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('https://kozabackend.vercel.app/products');
+                const response = await axios.get('http://localhost:3001/products');
                 setProducts(response.data);
                 setIsLoading(false);
             } catch (error) {
@@ -38,7 +45,6 @@ const NewArrivals = () => {
             </div>
         )
     }
-
     if (error) {
         return <div>Error fetching products: {error.message}</div>;
     }

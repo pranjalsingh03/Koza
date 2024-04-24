@@ -61,14 +61,15 @@ function Auth() {
             <div className="max-w-lg">
                 <h1 className="text-3xl font-bold text-center mb-8">Authentication</h1>
                 {userId ? (
-                    <div className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-                        <p className="text-xl mb-4 font-bold">User ID: {userId}</p>
-                        {/* Render other components */}
+                    // Render your home page component here
+                    <div>
+                        <h2>Welcome User!</h2>
+                        {/* Render your home page content */}
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <Login setUserId={setUserId} />
-                        <Signup setUserId={setUserId} />
+                        <Login handleLogin={handleLogin} />
+                        <Signup handleSignup={handleSignup} />
                     </div>
                 )}
             </div>
