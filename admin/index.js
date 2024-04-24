@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
+const fileUpload = require('express-fileupload');
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -17,9 +18,13 @@ app.use(session({
     saveUninitialized: false,
     resave: false
 }));
-app.use(express.static('uploads'));
+// app.use(express.static('uploads'));
 app.set('view engine', 'ejs');
 app.set("layouts", "./layouts/main");
+
+app.use(fileUpload({
+    useTempFiles:true
+}));
 
 
 app.use((req, res, next) => {
