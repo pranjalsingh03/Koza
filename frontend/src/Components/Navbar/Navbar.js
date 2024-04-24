@@ -1,7 +1,8 @@
-import React, { useState, useEffect ,useContext} from 'react';
-import { NavLink ,Link } from 'react-router-dom';
-import { Menu, Heart, ShoppingCart, X } from 'lucide-react';
-import { ShopContext } from '../../Context/ShopContextProvider';
+import {Heart, Menu, ShoppingCart, X} from 'lucide-react';
+import React, {useContext, useEffect, useState} from 'react';
+import {Link, NavLink} from 'react-router-dom';
+
+import {ShopContext} from '../../Context/ShopContextProvider';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);

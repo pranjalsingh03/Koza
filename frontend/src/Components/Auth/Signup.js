@@ -1,22 +1,23 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, {useState} from 'react';
 import {Link} from "react-router-dom";
 
 function Signup() {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
 
-    const handleSignup = async () => {
-        try {
-            const response = await axios.post('http://localhost:3001/signup', { name, email, password });
-            console.log('User created successfully:', response.data);
-        } catch (error) {
-            console.error('Error signing up:', error.response.data.error);
-            setError(error.response.data.error);
-        }
-    };
+  const handleSignup = async () => {
+    try {
+      const response = await axios.post('http://localhost:3001/signup',
+                                        {name, email, password});
+      console.log('User created successfully:', response.data);
+    } catch (error) {
+      console.error('Error signing up:', error.response.data.error);
+      setError(error.response.data.error);
+    }
+  };
 
     return (
         <>
@@ -34,31 +35,28 @@ function Signup() {
             className="block w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
         />
         <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="block w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-        />
-        <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="block w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
-        />
-        <button
-            onClick={handleSignup}
-            className="block w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
-        >
-            Signup
-        </button>
-        {error && <p className="text-red-500">{error}</p>}
+    type = "email"
+    placeholder = "Email"
+    value = {email} onChange = {(e) => setEmail(e.target.value)} className =
+        "block w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" /
+        > < input
+    type = "password"
+    placeholder = "Password"
+    value = {password} onChange = {(e) =>
+                                       setPassword(e.target.value)} className =
+        "block w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500" /
+        > < button
+    onClick = {handleSignup} className =
+        "block w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300" >
+        Signup<
+            /button>
+        {error && <p className="text-red-500">{error}</p>
+}
     </div>
     <div className="font-mono pt-2">Already Have An Account? <Link to="/login" className='text-blue-500'>Login</Link></div>
 </div>
 </>
     );
-}
+    }
 
-export default Signup;
+    export default Signup;

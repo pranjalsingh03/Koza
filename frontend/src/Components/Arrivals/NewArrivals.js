@@ -1,51 +1,52 @@
-import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import React, {useEffect, useState} from 'react';
+
 import ProductCard from './ProductCard';
 
-const NewArrivals = () => {
-    const [products, setProducts] = useState([]);
-    const [error, setError] = useState(null);
-    const [isLoading , setIsLoading] = useState(true);
-    const [cartItems, setCartItems] = useState([]);
+const NewArrivals =
+    () => {
+      const [products, setProducts] = useState([]);
+      const [error, setError] = useState(null);
+      const [isLoading, setIsLoading] = useState(true);
+      const [cartItems, setCartItems] = useState([]);
 
-    const addToCart = (product) => {
+      const addToCart = (product) => {
         console.log("Adding to cart:", product._id);
-        axios.post('http://localhost:3001/cart/add', { productId: product._id })
+        axios.post('http://localhost:3001/cart/add', {productId : product._id})
             .then(response => {
-                console.log("Add to cart response:", response.data);
-                setCartItems([...cartItems, response.data]);
+              console.log("Add to cart response:", response.data);
+              setCartItems([...cartItems, response.data ]);
             })
-            .catch(error => {
-                console.error('Error adding to cart:', error);
-            });
-    };
-    const likeProduct = (productId) => {
+            .catch(error => { console.error('Error adding to cart:', error); });
+      };
+      const likeProduct = (productId) => {
         console.log(`Liked product with ID: ${productId}`);
-    };
+      };
 
-    useEffect(() => {
+      useEffect(() => {
         const fetchProducts = async () => {
-            try {
-                const response = await axios.get('http://localhost:3001/products');
-                setProducts(response.data);
-                setIsLoading(false);
-            } catch (error) {
-                setError(error);
-                setIsLoading(false);
-            }
+          try {
+            const response = await axios.get('http://localhost:3001/products');
+            setProducts(response.data);
+            setIsLoading(false);
+          } catch (error) {
+            setError(error);
+            setIsLoading(false);
+          }
         };
 
         fetchProducts();
-    }, []);
+      }, []);
 
-    if (isLoading) {
+      if (isLoading) {
         return (
-            <div className="flex items-center justify-center h-screen mx-auto py-8 text-center">
-                <h1 className="text-3xl font-bold mb-4 text-blue-500">Loading...</h1>
-            </div>
-        )
-    }
-    if (error) {
+            <div className =
+                 "flex items-center justify-center h-screen mx-auto py-8 text-center">
+            <h1 className = "text-3xl font-bold mb-4 text-blue-500">
+                Loading...</h1>
+            </div>)
+      }
+      if (error) {
         return <div>Error fetching products: {error.message}</div>;
     }
 
@@ -58,10 +59,11 @@ const NewArrivals = () => {
                     <ProductCard key={product._id} product={product}
                         onAddToCart={() => addToCart(product)}
                         onLike={() => likeProduct(product._id)} />
-                ))}
+                ))
+      }
             </div>
         </div>
     );
-}
+    }
 
 export default NewArrivals;

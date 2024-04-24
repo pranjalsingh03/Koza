@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { ShopContext } from '../../Context/ShopContextProvider';
+import React, {useContext, useEffect, useState} from 'react';
+
+import {ShopContext} from '../../Context/ShopContextProvider';
 import Newsletter from '../Newsletter/Newsletter';
 
 function Cart() {
-    const { cartItems, addToCart, removeFromCart } = useContext(ShopContext);
-    const [totalPrice, setTotalPrice] = useState(0);
+  const {cartItems, addToCart, removeFromCart} = useContext(ShopContext);
+  const [totalPrice, setTotalPrice] = useState(0);
 
-    useEffect(() => {
-        const total = Object.values(cartItems).reduce((acc, item) => acc + item.price * item.quantity, 0);
-        setTotalPrice(total);
-    }, [cartItems]);
+  useEffect(() => {
+    const total = Object.values(cartItems).reduce(
+        (acc, item) => acc + item.price * item.quantity, 0);
+    setTotalPrice(total);
+  }, [ cartItems ]);
 
     return (
         <>
