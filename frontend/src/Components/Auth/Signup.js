@@ -10,7 +10,7 @@ function Signup() {
 
     const handleSignup = async () => {
         try {
-            const response = await axios.post('http://localhost:3001/signup', { name, email, password });
+            const response = await axios.post('https://kuzebackend.vercel.app/signup', { name, email, password });
             console.log('User created successfully:', response.data);
         } catch (error) {
             console.error('Error signing up:', error.response.data.error);

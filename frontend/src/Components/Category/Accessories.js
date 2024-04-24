@@ -10,7 +10,7 @@ function Accessories() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('https://kozabackend.vercel.app/products');
+                const response = await axios.get('https://kuzebackend.vercel.app/products');
                 setProducts(response.data);
             } catch (error) {
                 console.error('Error fetching products:', error);

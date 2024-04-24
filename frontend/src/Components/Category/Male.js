@@ -10,7 +10,7 @@ function Male() {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('https://kozabackend.vercel.app/products');
+                const response = await axios.get('https://kuzubackend.vercel.app/products');
                 setProducts(response.data);
             } catch (error) {
                 console.error('Error fetching products:', error);

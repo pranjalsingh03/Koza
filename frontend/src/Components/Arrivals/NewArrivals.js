@@ -10,7 +10,7 @@ const NewArrivals = () => {
 
     const addToCart = (product) => {
         console.log("Adding to cart:", product._id);
-        axios.post('http://localhost:3001/cart/add', { productId: product._id })
+        axios.post('https://kuzebackend.vercel.app/cart/add', { productId: product._id })
             .then(response => {
                 console.log("Add to cart response:", response.data);
                 setCartItems([...cartItems, response.data]);
@@ -26,7 +26,7 @@ const NewArrivals = () => {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/products');
+                const response = await axios.get('https://kuzebackend.vercel.app/products');
                 setProducts(response.data);
                 setIsLoading(false);
             } catch (error) {

@@ -8,7 +8,7 @@ function Login() {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post('http://localhost:3001/login', { email, password });
+            const response = await axios.post('https://kuzebackend.vercel.app/login', { email, password });
             if (response.data.token) {
                 console.log(response.data);
                 // Redirect to the home page
