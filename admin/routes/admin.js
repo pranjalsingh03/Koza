@@ -4,23 +4,18 @@ const Product = require("../models/productModel");
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const multer = require("multer");
+const cloudinary = require("cloudinary").v2;
+const Blog = require("../models/blogModel");
+const mongoose = require("mongoose")
 
 const adminLayout = "../views/layouts/admin";
 const jwtSecret = process.env.JWT_Key;
 
-var storage = multer.diskStorage({
-  destination: function(req,file,cb){
-      cb(null,'./uploads')
-  },
-  filename: function(req,file,cb){
-      cb(null,file.filename+'_'+Date.now()+"_"+file.originalname)
-  }
-});
-
-var upload = multer({
-  storage:storage
-}).single('image');
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET
+})
 
 const authMiddleware = (req, res, next) => {
   const token = req.cookies.token;
@@ -82,6 +77,10 @@ router.post("/admin", async (req, res) => {
   }
 });
 
+router.get("/home",(req,res)=>{
+  res.send("Welcome to the home page")
+})
+
 router.post("/register",async(req,res)=>{
   try{
     const {username,password} = req.body;
@@ -111,13 +110,23 @@ router.get("/admin/addproduct", authMiddleware, async (req, res) => {
   res.render("admin/addproduct", { title: "Add Product", products: products });
 });
 
-router.post('/addproduct',authMiddleware, upload, async (req, res) => {
-  try {
+router.post('/addproduct', authMiddleware, async (req, res) => {
+  console.log(req.body);
+  const file = req.files.image;
+  
+  cloudinary.uploader.upload(file.tempFilePath, async (error, result) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).send('Error uploading file to Cloudinary');
+    }
+
+    try {
       const product = new Product({
           name: req.body.name,
-          image: req.file.filename,
+          image: result.url,
           price: req.body.price,
           discount: req.body.discount,
+          description: req.body.description,
           category: req.body.category
       });
       await product.save();
@@ -126,13 +135,107 @@ router.post('/addproduct',authMiddleware, upload, async (req, res) => {
           message: 'Product Added Successfully'
       };
       res.redirect('/admin/product');
+    } catch (err) {
+      next(err);
+    }
+  });
+});
+
+router.get("/admin/blog", authMiddleware, async (req, res) => {
+  const blogs = await Blog.find();
+  res.render("admin/blog", { title: "Blog", blogs: blogs });
+});
+
+router.get("/admin/addblog", authMiddleware, async (req, res) => {
+  res.render("admin/addblog", { title: "Add Blog" });
+});
+
+router.post("/addblog", authMiddleware, async (req, res) => {
+  try {
+    const { title, content, author } = req.body;
+    const blog = await Blog.create({ title, content, author });
+    await blog.save();
+    req.session.message = {
+      type: "success",
+      message: "Blog added successfully"
+    };
+    res.render("/admin/blog");
   } catch (error) {
-      console.error(error);
-      res.status(500).send('Internal Server Error');
+    console.log(error);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
-router.post('/admin/update/:id',authMiddleware, upload, async (req, res) => {
+// Editing a blog
+router.get("/admin/editblog/:id", authMiddleware, async (req, res) => {
+  try {
+    const id = req.params.id;
+    // Ensure that id is a valid ObjectId
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(id);
+    
+    if (!isValidObjectId) {
+      // If id is not a valid ObjectId, redirect to the blog page or handle the error appropriately
+      return res.redirect("/admin/blog");
+    }
+    
+    const blog = await Blog.findById(id);
+    if (!blog) {
+      return res.redirect("/admin/blog");
+    }
+    res.render("admin/editblog", { title: "Edit Blog", blog: blog });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+router.put("/admin/editblog/:id", authMiddleware, async (req, res) => {
+  try {
+    const id = req.params.id; // Ensure you're getting the correct blog post ID from the request
+    const { title, content, author } = req.body;
+    
+    // Update the blog post using the correct ObjectId
+    const blog = await Blog.findByIdAndUpdate(id, { title, content, author }, { new: true });
+    
+    if (!blog) {
+      return res.redirect("/admin/blog");
+    }
+    
+    req.session.message = {
+      type: "success",
+      message: "Blog Updated Successfully",
+    };
+    
+    res.redirect("/admin/blog");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+// Deleting a blog
+router.delete("/admin/removeblog/:id", authMiddleware, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const blog = await Blog.findByIdAndDelete(id);
+    if (!blog) {
+      return res.status(404).send("Blog not found");
+    }
+    req.session.message = {
+      type: "success",
+      message: "Blog Deleted Successfully",
+    };
+    res.redirect("/admin/blog");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+
+router.post('/admin/update/:id',authMiddleware, async (req, res) => {
   try {
       let id = req.params.id;
       let new_image = '';
@@ -152,6 +255,7 @@ router.post('/admin/update/:id',authMiddleware, upload, async (req, res) => {
           image: new_image,
           price: req.body.price,
           discount: req.body.discount,
+          description: req.body.description,
           category: req.body.category
       });
 
