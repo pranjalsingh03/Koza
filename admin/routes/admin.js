@@ -46,6 +46,10 @@ router.get("/admin", async (req, res) => {
   }
 });
 
+router.get("/",(req,res)=>{
+  res.send("Hello World!")
+})
+
 // router.get("/",(req,res)=>{
 //   res.render("admin/index",{title:"Admin Login"})
 // })
