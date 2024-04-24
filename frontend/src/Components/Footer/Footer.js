@@ -8,12 +8,12 @@ const Footer = (props) => {
                 <div className="w-full  max-mb-4 max-md:mb-2">
                     <h3 className="text-lg font-bold mb-2">About Us</h3>
                     <ul>
-                        <li><a href="/" className="text-gray-600 hover:text-gray-800">About Us</a></li>
-                        <li><a href="/" className="text-gray-600 hover:text-gray-800">Blog</a></li>
-                        <li><a href="/" className="text-gray-600 hover:text-gray-800">Shop</a></li>
-                        <li><a href="/" className="text-gray-600 hover:text-gray-800">Mens</a></li>
-                        <li><a href="/" className="text-gray-600 hover:text-gray-800">Women</a></li>
-                        <li><a href="/" className="text-gray-600 hover:text-gray-800">Accessories</a></li>
+                        <li><a href="/aboutus" className="text-gray-600 hover:text-gray-800">About Us</a></li>
+                        <li><a href="/blogs" className="text-gray-600 hover:text-gray-800">Blog</a></li>
+                        <li><a href="/shop" className="text-gray-600 hover:text-gray-800">Shop</a></li>
+                        <li><a href="/category/male" className="text-gray-600 hover:text-gray-800">Mens</a></li>
+                        <li><a href="/category/female" className="text-gray-600 hover:text-gray-800">Women</a></li>
+                        <li><a href="/category/accessories" className="text-gray-600 hover:text-gray-800">Accessories</a></li>
                         <li><a href="/" className="text-gray-600 hover:text-gray-800">FAQ</a></li>
                         
                     </ul>
