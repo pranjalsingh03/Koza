@@ -46,9 +46,9 @@ router.get("/admin", async (req, res) => {
   }
 });
 
-router.get("/",(req,res)=>{
-  res.render("admin/index",{title:"Admin Login"})
-})
+// router.get("/",(req,res)=>{
+//   res.render("admin/index",{title:"Admin Login"})
+// })
 
 
 
