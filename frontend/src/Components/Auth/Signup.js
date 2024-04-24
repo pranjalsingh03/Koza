@@ -1,46 +1,63 @@
-import React, { useState } from "react";
-import axios from "axios";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState } from 'react';
+import axios from 'axios';
+import {Link} from "react-router-dom";
 
 function Signup() {
-    const history = useNavigate();
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
-    async function submit(e) {
-        e.preventDefault();
-
+    const handleSignup = async () => {
         try {
-            await axios.post("https://kozabackend.vercel.app/signup", {
-                email,
-                password
-            }).then(res => {
-                if (res.data === "exist") {
-                    alert("User already exists");
-                } else if (res.data === "notexist") {
-                    history("/", { state: { id: email } });
-                }
-            }).catch(e => {
-                alert("Wrong details");
-                console.log(e);
-            });
-
-        } catch (e) {
-            console.log(e);
+            const response = await axios.post('http://localhost:3001/signup', { name, email, password });
+            console.log('User created successfully:', response.data);
+        } catch (error) {
+            console.error('Error signing up:', error.response.data.error);
+            setError(error.response.data.error);
         }
-    }
+    };
 
     return (
-        <div className="login">
-            <h1 className="text-2xl font-bold mb-4">Signup</h1>
-            <form action="POST" className="mb-4">
-                <input type="email" onChange={(e) => { setEmail(e.target.value) }} placeholder="Email" className="block w-full border border-gray-300 rounded-md py-2 px-3 mb-2" />
-                <input type="password" onChange={(e) => { setPassword(e.target.value) }} placeholder="Password" className="block w-full border border-gray-300 rounded-md py-2 px-3 mb-2" />
-                <button type="submit" onClick={submit} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md">Signup</button>
-            </form>
-            <p>OR</p>
-            <Link to="/login" className="text-blue-500 hover:underline">Login Page</Link>
+        <>
+        <div className='pt-12 flex justify-center'>
+            <p className='font-bold text-2xl pb-4'>Create A New Account</p>
         </div>
+        <div className="max-w-md mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <h2 className="text-3xl font-semibold mb-4">Signup</h2>
+    <div className="space-y-4">
+        <input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="block w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+        />
+        <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="block w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+        />
+        <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="block w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500"
+        />
+        <button
+            onClick={handleSignup}
+            className="block w-full px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
+        >
+            Signup
+        </button>
+        {error && <p className="text-red-500">{error}</p>}
+    </div>
+    <div className="font-mono pt-2">Already Have An Account? <Link to="/login" className='text-blue-500'>Login</Link></div>
+</div>
+</>
     );
 }
 
