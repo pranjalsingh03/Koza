@@ -55,6 +55,7 @@ const Navbar = () => {
                 <li onClick={()=>(setMenu("newarrivals"))}><NavLink to="/newarrivals" className={`text-gray-700 ${isOpen ? 'text-white': 'text-gray-700'}`}activeClassName="font-bold">New Arrivals{menu ==="newarrivals"?<hr/>:<></>}</NavLink></li>
                 <li onClick={()=>(setMenu("blogs"))}><NavLink to="/blogs" className={`text-gray-700 ${isOpen ? 'text-white': 'text-gray-700'}`}activeClassName="font-bold">Blogs{menu ==="blogs"?<hr/>:<></>}</NavLink></li>
                 <li onClick={()=>(setMenu("faq"))}><NavLink to="/FAQ" className={`text-gray-700 ${isOpen ? 'text-white': 'text-gray-700'}`}activeClassName="font-bold" >FAQ{menu === "faq"?<hr/>:<></>}</NavLink></li>
+                <li onClick={()=>(setMenu("review"))}><NavLink to="/review" className={`text-gray-700 ${isOpen ? 'text-white': 'text-gray-700'}`}activeClassName="font-bold" >Review{menu === "review"?<hr/>:<></>}</NavLink></li>
             </ul>
             <div className="flex items-center">
                 <Heart className="h-6 w-6 text-gray-700 mr-4" />
