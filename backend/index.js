@@ -8,6 +8,7 @@ const Blog = require("./models/blogModel")
 require('dotenv').config();
 const jwt = require("jsonwebtoken")
 const cookieParser = require("cookie-parser");
+const Razorpay = require('razorpay');
 
 const app = express();
 const PORT = 3001;
@@ -15,6 +16,7 @@ const PORT = 3001;
 // MongoDB connection URI
 const MONGODB_URI = process.env.MONGODB_CONNECT_URL;
 const JWT_key = process.env.JWT_SKEY;
+const CORS_URI = process.env.CORS_URI;
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
@@ -28,10 +30,17 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
     });
 
 app.use(cors({
-    origin: 'https://kuzeleather.vercel.app',
+    origin: CORS_URI||'http://localhost:3000',
     methods: ['GET', 'POST', 'DELETE'],
     credentials: true
 }));
+
+//RazorPay integration
+
+const instance = new Razorpay({
+    key_id: process.env.RAZOR_KEY_ID,
+    key_secret: process.env.RAZOR_KEY_SECRET,
+});
 
 app.use(express.json());
 app.use(cookieParser());
@@ -47,6 +56,39 @@ const authenticateToken = (req, res, next) => {
         next();
     });
 };
+
+app.post("/checkout", async (req, res) => {
+    const options = {
+        amount: 50000,
+        currency: "INR",
+    };
+
+    try {
+        const order = await instance.orders.create(options);
+        console.log(order);
+        res.status(200).json({ 
+            success: true,
+            message: "Order created successfully!",
+            orderId: order.id
+        });
+    } catch (error) {
+        console.error("Error creating order:", error);
+        res.status(500).json({ 
+            success: false,
+            message: "Error creating order"
+        });
+    }
+});
+
+
+app.get('/isAuthenticated', (req, res) => {
+    try{
+        res.status(200).json({ message: 'Authenticated' });
+    }catch(error){
+        console.log("Error in authentication : ",error);
+        res.status(401).json({ error: 'Unauthorized' });
+    }
+});
 
 app.post('/cart/add', async (req, res) => {
     try {
