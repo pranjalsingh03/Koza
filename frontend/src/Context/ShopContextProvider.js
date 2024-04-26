@@ -14,7 +14,7 @@ const ShopContextProvider = (props) => {
             })
             .catch(error => console.error('Error fetching products:', error));
 
-        axios.get('http://localhost:3001/cart')
+        axios.get('http://localhost:3001/carts')
             .then(response => {
                 setCartItems(response.data);
             })

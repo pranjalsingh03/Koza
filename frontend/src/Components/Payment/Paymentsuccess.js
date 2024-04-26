@@ -15,7 +15,7 @@ function Paymentsuccess() {
             <p className="mt-4">Thank you for your order!</p>
             <p className="mt-2">Your payment was successful.</p>
             <p className="mt-2">Reference No. : {paymentId}</p>
-            <button className="mt-4 px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600">Continue Shopping</button>
+            <button className="mt-4 px-6 py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600"onClick={()=> window.location.href="/newarrivals"}>Continue Shopping</button>
         </div>
     );
 }

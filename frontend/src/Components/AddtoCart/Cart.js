@@ -7,10 +7,10 @@ import ReviewList from '../../Review/ReviewList';
 import ReviewSection from '../../Review/ReviewSection';
 
 function Cart() {
-    const {addToCart, removeFromCart } = useContext(ShopContext);
+    const { addToCart, removeFromCart } = useContext(ShopContext);
     const [totalPrice, setTotalPrice] = useState(0);
     const [cartItems, setCartItems] = useState([]);
-    
+
     useEffect(() => {
         const getCartItems = async () => {
             try {
@@ -23,41 +23,44 @@ function Cart() {
                     console.log('Invalid data structure received for cart items:', response.data);
                 }
             } catch (error) {
-                console.log(`Error: ${error}`);
+                console.log(`Error fetching cart items: ${error}`);
             }
         };
         getCartItems();
     }, []);
-    
 
-    const handleCheckout = async(totalPrice) => {
-        const { data: {key}} = await axios.get('http://localhost:3001/meowmeow');
-        const { data: {order} } = await axios.post('http://localhost:3001/checkout', {
-            amount: totalPrice
-        });
-        const options = {
-            key,
-            amount: order.amount,
-            currency: "INR",
-            name: "Kuze Leather",
-            description: "Leather Store",
-            image: "https://avatars.githubusercontent.com/u/112399218?v=4",
-            order_id: order.id,
-            callback_url:"http://localhost:3001/isAuthenticated",
-            prefill: {
-                "name": "Pranjal Singh",
-                "email": "pranjalsingh9304@gmail.com",
-                "contact": "9369154040"
-            },
-            notes: {
-                "address": "Lovely Professional University"
-            },
-            theme: {
-                "color": "#3399cc"
-            }
-        };
-        const razor = new window.Razorpay(options);
-        razor.open();
+    const handleCheckout = async () => {
+        try {
+            const { data: { key } } = await axios.get('http://localhost:3001/meowmeow');
+            const { data: { order } } = await axios.post('http://localhost:3001/checkout', {
+                amount: totalPrice
+            });
+            const options = {
+                key,
+                amount: order.amount,
+                currency: "INR",
+                name: "Kuze Leather",
+                description: "Leather Store",
+                image: "https://avatars.githubusercontent.com/u/112399218?v=4",
+                order_id: order.id,
+                callback_url: "http://localhost:3001/isAuthenticated",
+                prefill: {
+                    "name": "Pranjal Singh",
+                    "email": "pranjalsingh9304@gmail.com",
+                    "contact": "9369154040"
+                },
+                notes: {
+                    "address": "Lovely Professional University"
+                },
+                theme: {
+                    "color": "#3399cc"
+                }
+            };
+            const razor = new window.Razorpay(options);
+            razor.open();
+        } catch (error) {
+            console.log(`Error during checkout: ${error}`);
+        }
     };
 
     return (
@@ -87,9 +90,9 @@ function Cart() {
                     </div>
                 </div>
             </div>
-            <ReviewList/>
-            <ReviewSection/>
-            <NewArrivals/>
+            <ReviewList />
+            <ReviewSection />
+            <NewArrivals />
             <Newsletter />
         </>
     );
