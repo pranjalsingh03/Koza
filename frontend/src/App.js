@@ -11,6 +11,9 @@ import "./App.css";
 import Login from './Components/Auth/Login';
 import Signup from './Components/Auth/Signup';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import Paymentsuccess from './Components/Payment/Paymentsuccess';
+import PaymentFailed from './Components/Payment/PaymentFailed';
+import Review from './Review/Review';
 
 function App() {
   return (
@@ -45,6 +48,9 @@ function AppRoutes() {
         <Route path="/category" element={<CategoryPage />} />
         <Route path="/category/:type" element={<CategoryPage />} />
         <Route path="/product/:productId" element={<HomeProduct />} />
+        <Route path="/paymentsuccess" element={<Paymentsuccess/>} />
+        <Route path="/paymentfailed" element={<PaymentFailed/>} />
+        <Route path="/review" element={<Review/>} />
       </Routes>
       {!shouldHideHeaderFooter && <Footer email="kozaleather@help.com"/>}
     </>
