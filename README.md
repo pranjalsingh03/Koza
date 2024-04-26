@@ -1,4 +1,4 @@
-# Koza Leather 
+# Kuze Leather 
 An e-commerce solution for the leather products, on which all the leather products will be
 displayed. Present a curated selection that encompasses a wide range of premium items,
 including bags, wallets, shoes, jackets, belts, and accessories.
@@ -35,4 +35,4 @@ Start the server
 
 ## Deployed using vercel
 
-Live preview - [kozaleather.vercel.app](https://kozaleather.vercel.app/)
+Live preview - [kuzeleather.vercel.app](https://kuzeleather.vercel.app/)
