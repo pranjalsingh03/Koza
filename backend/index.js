@@ -9,6 +9,9 @@ require('dotenv').config();
 const jwt = require("jsonwebtoken")
 const cookieParser = require("cookie-parser");
 const Razorpay = require('razorpay');
+const crypto = require("crypto");
+const Cart = require('./models/cartModel');
+const Review = require('./models/reviewModel');
 
 const app = express();
 const PORT = 3001;
@@ -30,7 +33,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
     });
 
 app.use(cors({
-    origin: CORS_URI||'http://localhost:3000',
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'DELETE'],
     credentials: true
 }));
@@ -44,6 +47,7 @@ const instance = new Razorpay({
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(express.urlencoded({ extended: true }));
 
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
@@ -59,21 +63,21 @@ const authenticateToken = (req, res, next) => {
 
 app.post("/checkout", async (req, res) => {
     const options = {
-        amount: 50000,
+        amount: Number(req.body.amount * 100),
         currency: "INR",
     };
 
     try {
         const order = await instance.orders.create(options);
         console.log(order);
-        res.status(200).json({ 
+        res.status(200).json({
             success: true,
             message: "Order created successfully!",
-            orderId: order.id
+            order
         });
     } catch (error) {
         console.error("Error creating order:", error);
-        res.status(500).json({ 
+        res.status(500).json({
             success: false,
             message: "Error creating order"
         });
@@ -81,65 +85,52 @@ app.post("/checkout", async (req, res) => {
 });
 
 
-app.get('/isAuthenticated', (req, res) => {
-    try{
-        res.status(200).json({ message: 'Authenticated' });
-    }catch(error){
-        console.log("Error in authentication : ",error);
-        res.status(401).json({ error: 'Unauthorized' });
+app.post('/isAuthenticated', (req, res) => {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+
+    if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
+        return res.status(400).json({ error: 'Missing required parameters' });
+    }
+
+    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSignature = crypto.createHmac('sha256', process.env.RAZOR_KEY_SECRET)
+        .update(body)
+        .digest('hex');
+
+    isAuthentic = expectedSignature === razorpay_signature;
+    if (isAuthentic) {
+        res.redirect(`http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`)
+    } else {
+        res.redirect(`http://localhost:3000/paymentfailed?error=Invalid signature`)
     }
 });
+
+app.get("/meowmeow", (req, res) => {
+    res.status(200).json({ key: process.env.RAZOR_KEY_ID });
+})
 
 app.post('/cart/add', async (req, res) => {
     try {
-        const { productId } = req.body;
-        const authHeader = req.headers['authorization'];
+        const { name, price,image, quantity } = req.body;
+        const cartItem = { name, price,image, quantity };
 
-        if (!authHeader || !authHeader.startsWith('Bearer ')) {
-            return res.status(401).json({ error: 'JWT token is missing or invalid' });
-        }
+        const cart = await Cart.findOneAndUpdate(
+            {},
+            { $push: { items: cartItem } },
+            { upsert: true, new: true }
+        );
 
-        const token = authHeader.split(' ')[1];
-        console.log(token);
-        // Verify and decode the token
-        const decodedToken = jwt.verify(token, JWT_key);
-        const userId = decodedToken.userId;
-
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        const product = await Product.findById(productId);
-        if (!product) {
-            return res.status(404).json({ error: 'Product not found' });
-        }
-
-        user.cart.push(productId);
-        await user.save();
-
-        res.status(201).json({ message: 'Product added to cart successfully' });
+        res.status(201).json({ message: 'Product added to cart successfully', cart });
     } catch (error) {
         console.error('Error adding item to cart:', error);
-        if (error instanceof jwt.JsonWebTokenError) {
-            return res.status(401).json({ error: 'Invalid JWT token' });
-        }
         res.status(500).json({ error: 'Internal server error' });
     }
 });
-app.get('/cart', async (req, res) => {
+
+app.get('/carts', async (req, res) => {
     try {
-        if (!mongoose.Types.ObjectId.isValid(req.params.userId)) {
-            return res.status(400).json({ error: 'Invalid user ID' });
-        }
-
-        const user = await User.findById(req.params.userId).populate('cart');
-
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
-
-        res.status(200).json({ cart: user.cart });
+        const cart = await Cart.find();
+        res.status(200).json({ cart });
     } catch (error) {
         console.error('Error fetching cart items:', error);
         res.status(500).json({ error: 'Internal server error' });
@@ -189,22 +180,21 @@ app.get('/blogs', async (req, res) => {
 
 
 app.get('/product/:productId', async (req, res) => {
-        try {
-            const productId = req.params.productId;
-            const product = await Product.findById(productId);
-            if (!product) {
-                return res.status(404).json({ error: 'Product not found' });
-            }
-            res.json(product);
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ error: 'Internal server error' });
+    try {
+        const productId = req.params.productId;
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.status(404).json({ error: 'Product not found' });
         }
-    });
+        res.json(product);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
 
 // Signup endpoint
-app.post('/login', async (req, res) =>
-{
+app.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
@@ -246,6 +236,44 @@ app.post('/signup', async (req, res) => {
         res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
         console.error('Error signing up:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+
+app.get('/review', async (req, res) => {
+    try {
+        const reviews = await Review.find().sort({ createdAt: -1 });
+        res.json(reviews);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+app.post('/review', async (req, res) => {
+    const review = new Review({
+        name: req.body.name,
+        rating: req.body.rating,
+        comment: req.body.comment
+    });
+
+    try {
+        const newReview = await review.save();
+        res.status(201).json(newReview);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
+app.delete('/review/:id', async (req, res) => {
+    try {
+        const deletedReview = await Review.findByIdAndDelete(req.params.id);
+        if (!deletedReview) {
+            return res.status(404).json({ error: 'Review not found' });
+        }
+        res.json({ message: 'Review deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting review:', error);
         res.status(500).json({ error: 'Internal server error' });
     }
 });
