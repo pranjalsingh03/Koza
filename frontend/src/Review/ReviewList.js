@@ -7,7 +7,7 @@ const ReviewList = () => {
     useEffect(() => {
         const fetchReviews = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/review');
+                const response = await axios.get('https://kuzebackend.vercel.app/review');
                 setReviews(response.data);
             } catch (error) {
                 console.error('Error fetching reviews:', error);
@@ -18,7 +18,7 @@ const ReviewList = () => {
 
     const handleDeleteReview = async (reviewId) => {
         try {
-            await axios.delete(`http://localhost:3001/review/${reviewId}`);
+            await axios.delete(`https://kuzebackend.vercel.app/review/${reviewId}`);
             setReviews(reviews.filter(review => review._id !== reviewId));
         } catch (error) {
             console.error('Error deleting review:', error);

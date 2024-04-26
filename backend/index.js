@@ -12,6 +12,7 @@ const Razorpay = require('razorpay');
 const crypto = require("crypto");
 const Cart = require('./models/cartModel');
 const Review = require('./models/reviewModel');
+const Payment = require('./models/paymentModel');
 
 const app = express();
 const PORT = 3001;
@@ -33,7 +34,7 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
     });
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://kuzeleather.vercel.app',
     methods: ['GET', 'POST', 'DELETE'],
     credentials: true
 }));
@@ -69,14 +70,14 @@ app.post("/checkout", async (req, res) => {
 
     try {
         const order = await instance.orders.create(options);
-        console.log(order);
+        // console.log(order);
         res.status(200).json({
             success: true,
             message: "Order created successfully!",
             order
         });
     } catch (error) {
-        console.error("Error creating order:", error);
+        // console.error("Error creating order:", error);
         res.status(500).json({
             success: false,
             message: "Error creating order"
@@ -85,7 +86,7 @@ app.post("/checkout", async (req, res) => {
 });
 
 
-app.post('/isAuthenticated', (req, res) => {
+app.post('/isAuthenticated', async(req, res) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
@@ -99,9 +100,14 @@ app.post('/isAuthenticated', (req, res) => {
 
     isAuthentic = expectedSignature === razorpay_signature;
     if (isAuthentic) {
-        res.redirect(`http://localhost:3000/paymentsuccess?reference=${razorpay_payment_id}`)
+        await Payment.create({
+            razorpay_order_id,
+            razorpay_payment_id,
+            razorpay_signature
+        });
+        res.redirect(`https://kuzeleather.vercel.app/paymentsuccess?reference=${razorpay_payment_id}`);
     } else {
-        res.redirect(`http://localhost:3000/paymentfailed?error=Invalid signature`)
+        res.redirect(`https://kuzeleather.vercel.app/paymentfailed?error=Invalid signature`)
     }
 });
 

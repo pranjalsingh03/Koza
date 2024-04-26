@@ -14,7 +14,7 @@ function Cart() {
     useEffect(() => {
         const getCartItems = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/carts');
+                const response = await axios.get('https://kuzebackend.vercel.app/carts');
                 if (Array.isArray(response.data.cart)) {
                     setCartItems(response.data.cart);
                     const total = response.data.cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
@@ -31,8 +31,8 @@ function Cart() {
 
     const handleCheckout = async () => {
         try {
-            const { data: { key } } = await axios.get('http://localhost:3001/meowmeow');
-            const { data: { order } } = await axios.post('http://localhost:3001/checkout', {
+            const { data: { key } } = await axios.get('https://kuzebackend.vercel.app/meowmeow');
+            const { data: { order } } = await axios.post('https://kuzebackend.vercel.app/checkout', {
                 amount: totalPrice
             });
             const options = {
@@ -43,7 +43,7 @@ function Cart() {
                 description: "Leather Store",
                 image: "https://avatars.githubusercontent.com/u/112399218?v=4",
                 order_id: order.id,
-                callback_url: "http://localhost:3001/isAuthenticated",
+                callback_url: "https://kuzebackend.vercel.app/isAuthenticated",
                 prefill: {
                     "name": "Pranjal Singh",
                     "email": "pranjalsingh9304@gmail.com",

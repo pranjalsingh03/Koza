@@ -9,7 +9,7 @@ const ReviewForm = ({ onAddReview }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3001/review', {
+            const response = await axios.post('https://kuzebackend.vercel.app/review', {
                 name,
                 rating,
                 comment

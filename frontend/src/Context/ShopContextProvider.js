@@ -8,13 +8,13 @@ const ShopContextProvider = (props) => {
     const [allProducts, setAllProducts] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:3001/products')
+        axios.get('https://kuzebackend.vercel.app/products')
             .then(response => {
                 setAllProducts(response.data);
             })
             .catch(error => console.error('Error fetching products:', error));
 
-        axios.get('http://localhost:3001/carts')
+        axios.get('https://kuzebackend.vercel.app/carts')
             .then(response => {
                 setCartItems(response.data);
             })

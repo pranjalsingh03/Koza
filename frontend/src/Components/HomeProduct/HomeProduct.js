@@ -35,8 +35,8 @@ export default function HomeProduct() {
     };
 
     const handleCheckout = async (price) => {
-        const { data: {key}} = await axios.get('http://localhost:3001/meowmeow');
-        const { data: {order} } = await axios.post('http://localhost:3001/checkout', {
+        const { data: {key}} = await axios.get('https://kuzebackend.vercel.app/meowmeow');
+        const { data: {order} } = await axios.post('https://kuzebackend.vercel.app/checkout', {
             amount: price
         });
         const options = {
@@ -47,7 +47,7 @@ export default function HomeProduct() {
             description: "Leather Store",
             image: "https://avatars.githubusercontent.com/u/112399218?v=4",
             order_id: order.id,
-            callback_url:"http://localhost:3001/isAuthenticated",
+            callback_url:"https://kuzebackend.vercel.app/isAuthenticated",
             prefill: {
                 "name": "Pranjal Singh",
                 "email": "pranjalsingh9304@gmail.com",
