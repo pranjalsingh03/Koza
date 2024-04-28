@@ -15,6 +15,7 @@ const Review = require('./models/reviewModel');
 const Payment = require('./models/paymentModel');
 const Newsletter = require('./models/newsletterModel');
 const nodemailer = require("nodemailer");
+const Contactus = require('./models/contactusModel');
 
 const app = express();
 const PORT = 3001;
@@ -36,7 +37,8 @@ mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true 
     });
 
 app.use(cors({
-    origin: 'https://kuzeleather.vercel.app',
+    // origin: 'https://kuzeleather.vercel.app',
+    origin: 'http://localhost:3002',
     methods: ['GET', 'POST', 'DELETE'],
     credentials: true
 }));
@@ -330,12 +332,24 @@ app.post("/newsletter", async (req, res) => {
     try {
         const newEmail = new Newsletter({ email });
         await newEmail.save();
-        mailOptions.to = email; // Set recipient email dynamically
+        mailOptions.to = email;
         await transporter.sendMail(mailOptions);
         console.log("Email sent successfully");
         res.status(201).json({ message: "Email added to newsletter and sent successfully" });
     } catch (error) {
         console.error("Error adding email to newsletter or sending email:", error);
         res.status(500).json({ error: "Internal server error" });
+    }
+});
+
+app.post('/contactus', async (req, res) => {
+    const { name, email, message } = req.body;
+    try {
+        const newContactus = new Contactus({ name, email, message });
+        await newContactus.save();
+        res.status(201).json({ message: 'Contact details saved successfully' });
+    } catch (error) {
+        console.error('Error saving contactus details:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
