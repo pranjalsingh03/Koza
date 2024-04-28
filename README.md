@@ -8,13 +8,13 @@ including bags, wallets, shoes, jackets, belts, and accessories.
 Clone the project
 
 ```bash
-  git clone https://github.com/pranjalsingh03/Koza.git
+  git clone https://github.com/pranjalsingh03/Kuze.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd koza 
+  cd kuze 
 ```
 For Running Frontend Locally
 ```bash
