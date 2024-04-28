@@ -13,6 +13,8 @@ const crypto = require("crypto");
 const Cart = require('./models/cartModel');
 const Review = require('./models/reviewModel');
 const Payment = require('./models/paymentModel');
+const Newsletter = require('./models/newsletterModel');
+const nodemailer = require("nodemailer");
 
 const app = express();
 const PORT = 3001;
@@ -50,6 +52,27 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
+const transporter = nodemailer.createTransport({
+    host: "smtp.ethereal.email",
+    port: 587,
+    secure: false, // Use `true` for port 465, `false` for all other ports
+    auth: {
+        user: process.env.USER,
+        pass: process.env.USER_PASS,
+    },
+});
+
+const mailOptions = {
+    from: {
+        name: "Kuze Leather <noreply@kuze-leather.com>",
+        address: process.env.USER
+    },
+    to: "pranjalsingh9304@gmail.com",
+    subject: "Welcome to Kuze Leather",
+    text: "Thank you for subscribing to our newsletter. Stay tuned for more updates!",
+    html: "<p>Thank you for subscribing to our newsletter. Stay tuned for more updates!</p>"
+};
+
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -86,7 +109,7 @@ app.post("/checkout", async (req, res) => {
 });
 
 
-app.post('/isAuthenticated', async(req, res) => {
+app.post('/isAuthenticated', async (req, res) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 
     if (!razorpay_order_id || !razorpay_payment_id || !razorpay_signature) {
@@ -117,8 +140,8 @@ app.get("/meowmeow", (req, res) => {
 
 app.post('/cart/add', async (req, res) => {
     try {
-        const { name, price,image, quantity } = req.body;
-        const cartItem = { name, price,image, quantity };
+        const { name, price, image, quantity } = req.body;
+        const cartItem = { name, price, image, quantity };
 
         const cart = await Cart.findOneAndUpdate(
             {},
@@ -281,5 +304,38 @@ app.delete('/review/:id', async (req, res) => {
     } catch (error) {
         console.error('Error deleting review:', error);
         res.status(500).json({ error: 'Internal server error' });
+    }
+});
+
+// app.post("/newsletter", async(req,res)=>{
+//     const {email} = req.body;
+//     try {
+//         const newEmail = new Newsletter({email});
+//         await newEmail.save();
+//         res.status(201).json({message: "Email added to newsletter"});
+//         try{
+//             await transporter.sendMail(mailOptions);
+//             console.log("Email sent successfully");
+//         }catch(error){
+//             console.log("There was an issue sending the email:", error);
+//         }
+//     } catch (error) {
+//         console.error("Error adding email to newsletter:", error);
+//         res.status(500).json({error: "Internal server error"});
+//     }
+// })
+
+app.post("/newsletter", async (req, res) => {
+    const { email } = "singhmagan9304@gmail.com";
+    try {
+        const newEmail = new Newsletter({ email });
+        await newEmail.save();
+        mailOptions.to = email; // Set recipient email dynamically
+        await transporter.sendMail(mailOptions);
+        console.log("Email sent successfully");
+        res.status(201).json({ message: "Email added to newsletter and sent successfully" });
+    } catch (error) {
+        console.error("Error adding email to newsletter or sending email:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
