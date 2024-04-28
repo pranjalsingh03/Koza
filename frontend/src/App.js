@@ -14,6 +14,8 @@ import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-route
 import Paymentsuccess from './Components/Payment/Paymentsuccess';
 import PaymentFailed from './Components/Payment/PaymentFailed';
 import Review from './Review/Review';
+import FAQSection from './Components/FAQ/FaqSection';
+import ContactUs from './Components/Contactus/Contactus';
 
 function App() {
   return (
@@ -40,8 +42,8 @@ function AppRoutes() {
         <Route path="/signup" element={<Signup />} exact />
         <Route path="/home" element={<Home />} exact />
         <Route path="/blogs" element={<Blog />} exact />
-        {/* <Route path="/contactus" element={<Home />} exact /> */}
-        <Route path="/FAQ" element={<Home />} exact />
+        <Route path="/contactus" element={<ContactUs />} exact />
+        <Route path="/FAQ" element={<FAQSection />} exact />
         <Route path="/newarrivals" element={<NewArrivals />} exact />
         <Route path="/shop" element={<Home />} exact />
         <Route path="/aboutus" element={<Home />} exact />
@@ -52,7 +54,7 @@ function AppRoutes() {
         <Route path="/paymentfailed" element={<PaymentFailed/>} />
         <Route path="/review" element={<Review/>} />
       </Routes>
-      {!shouldHideHeaderFooter && <Footer email="kozaleather@help.com"/>}
+      {!shouldHideHeaderFooter && <Footer email="kuzeleather@help.com"/>}
     </>
   );
 }
